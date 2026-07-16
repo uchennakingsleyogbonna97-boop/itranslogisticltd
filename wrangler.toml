@@ -1,0 +1,30 @@
+# Cloudflare Pages / Workers deployment configuration
+# Docs: https://developers.cloudflare.com/pages/
+
+name = "itrans-logistics"
+compatibility_date = "2026-07-15"
+
+# For Cloudflare Pages (static site + functions)
+[site]
+bucket = "./dist"
+
+# Build settings for Cloudflare Pages
+[build]
+command = "npm run build"
+cwd = "."
+
+# SPA routing - all routes serve index.html
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
+
+# Environment variables (set via dashboard or wrangler secret)
+# VITE_PAYSTACK_PUBLIC_KEY
+# VITE_EMAILJS_SERVICE_ID
+# VITE_EMAILJS_TEMPLATE_ID
+# VITE_EMAILJS_PUBLIC_KEY
+
+# Optional: Cloudflare Workers Functions for backend API
+# [[env.production]]
+# name = "itrans-logistics-prod"

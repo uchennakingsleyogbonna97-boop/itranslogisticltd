@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pay Customs Fee - iTrans Logistics</title>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container { max-width: 500px; margin: 0 auto; }
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo h1 { font-family: 'Oswald', sans-serif; font-size: 28px; color: #000; }
+    .logo span { color: #f28705; }
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .alert {
+      background: #fff7ed;
+      border-bottom: 1px solid #fed7aa;
+      padding: 16px 20px;
+      display: flex;
+      gap: 12px;
+    }
+    .alert-icon { width: 20px; height: 20px; color: #f97316; flex-shrink: 0; margin-top: 2px; }
+    .alert-title { font-weight: 600; color: #9a3412; font-size: 14px; }
+    .alert-text { color: #c2410c; font-size: 13px; margin-top: 2px; }
+    .section { padding: 24px; border-bottom: 1px solid #f3f4f6; }
+    .section-title { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #000; }
+    .detail-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+    .detail-label { color: #9ca3af; font-size: 14px; }
+    .detail-value { color: #000; font-weight: 500; font-size: 14px; text-align: right; max-width: 200px; }
+    .amount-box {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      padding: 24px;
+      text-align: center;
+      border-bottom: 1px solid #fed7aa;
+    }
+    .amount-label { color: #9ca3af; font-size: 14px; margin-bottom: 8px; }
+    .amount-value { font-family: 'Oswald', sans-serif; font-size: 48px; font-weight: 700; color: #f28705; }
+    .amount-currency { font-size: 28px; }
+    .amount-note { color: #9ca3af; font-size: 12px; margin-top: 4px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 6px; }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { outline: none; border-color: #f28705; }
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #f28705, #d97706);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pay-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(242,135,5,0.3); }
+    .pay-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+      color: #9ca3af;
+      font-size: 12px;
+    }
+    .success-card {
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: #dcfce7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .success-icon svg { width: 40px; height: 40px; color: #22c55e; }
+    .success-title { font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 700; color: #000; margin-bottom: 8px; }
+    .success-text { color: #6b7280; margin-bottom: 24px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 14px;
+      margin-top: 20px;
+    }
+    .back-link:hover { color: #f28705; }
+    .hidden { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 1s linear infinite; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Logo -->
+    <div class="logo">
+      <h1>itr<span>ans</span></h1>
+    </div>
+
+    <!-- Payment Form -->
+    <div id="paymentForm" class="card">
+      <!-- Alert -->
+      <div class="alert">
+        <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <div>
+          <div class="alert-title">Customs Hold</div>
+          <div class="alert-text">Your shipment is held at destination customs. Complete payment to release.</div>
+        </div>
+      </div>
+
+      <!-- Shipment Details -->
+      <div class="section">
+        <div class="section-title">Shipment Details</div>
+        <div class="detail-row">
+          <span class="detail-label">Tracking Number</span>
+          <span class="detail-value" id="trackingNum">-</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Destination</span>
+          <span class="detail-value" id="destination">-</span>
+        </div>
+      </div>
+
+      <!-- Amount -->
+      <div class="amount-box">
+        <div class="amount-label">Amount Due</div>
+        <div class="amount-value"><span id="amount">0</span> <span class="amount-currency" id="currency">USD</span></div>
+        <div class="amount-note">Customs clearance & handling fee</div>
+      </div>
+
+      <!-- Payment Form -->
+      <div class="section">
+        <div class="section-title">Payment Information</div>
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" class="form-input" id="customerName" placeholder="Enter your full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address *</label>
+          <input type="email" class="form-input" id="customerEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" id="customerPhone" placeholder="+1 234 567 890">
+        </div>
+
+        <button class="pay-btn" id="payBtn" onclick="handlePayment()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+          </svg>
+          <span id="btnText">Pay Now</span>
+        </button>
+
+        <div class="secure-badge">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+          </svg>
+          Secured by Paystack — Accepts all international debit cards
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="successScreen" class="card hidden">
+      <div class="success-card">
+        <div class="success-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h2 class="success-title">Payment Successful!</h2>
+        <p class="success-text">Your customs clearance fee has been paid. Your shipment will be released for delivery.</p>
+        <div style="background:#f9fafb; border-radius:12px; padding:16px; margin-bottom:20px; text-align:left;">
+          <div class="detail-row"><span class="detail-label">Reference</span><span class="detail-value" id="refNum">-</span></div>
+          <div class="detail-row"><span class="detail-label">Amount</span><span class="detail-value" id="paidAmount">-</span></div>
+        </div>
+        <a href="#/" class="pay-btn" style="text-decoration:none;">Back to Tracking</a>
+      </div>
+    </div>
+
+    <!-- Back Link -->
+    <div style="text-align:center; margin-top:20px;">
+      <a href="#/" class="back-link">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Back to Home
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Paystack Test Public Key
+    const PAYSTACK_KEY = 'pk_test_2519edc73a85391f6d988e2fca9baab6234666c';
+
+    // Mock shipment data
+    const shipments = {
+      'ITR78738957': { amount: 450, currency: 'PLN', destination: 'Wrocław, Poland' },
+      'ITR78738954': { amount: 380, currency: 'RON', destination: 'Sibiu, Romania' },
+      'ITR78738953': { amount: 120, currency: 'EUR', destination: 'Paris, France' },
+      'ITR78738955': { amount: 420, currency: 'RON', destination: 'Romania' },
+      'ITR78738952': { amount: 85, currency: 'USD', destination: 'Texas, USA' },
+      'ITR78738951': { amount: 65, currency: 'EUR', destination: 'Senec, Slovakia' }
+    };
+
+    // Get tracking number from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const trackingNum = urlParams.get('tracking');
+
+    // Populate data
+    if (trackingNum && shipments[trackingNum.toUpperCase()]) {
+      const data = shipments[trackingNum.toUpperCase()];
+      document.getElementById('trackingNum').textContent = trackingNum.toUpperCase();
+      document.getElementById('destination').textContent = data.destination;
+      document.getElementById('amount').textContent = data.amount;
+      document.getElementById('currency').textContent = data.currency;
+    } else {
+      document.getElementById('trackingNum').textContent = trackingNum || 'Invalid';
+      document.getElementById('payBtn').disabled = true;
+      document.getElementById('btnText').textContent = 'Invalid Tracking';
+    }
+
+    function handlePayment() {
+      const name = document.getElementById('customerName').value;
+      const email = document.getElementById('customerEmail').value;
+      const phone = document.getElementById('customerPhone').value;
+
+      if (!name || !email) {
+        alert('Please fill in your name and email');
+        return;
+      }
+
+      const data = shipments[trackingNum.toUpperCase()];
+      if (!data) return;
+
+      const btn = document.getElementById('payBtn');
+      const btnText = document.getElementById('btnText');
+      btn.disabled = true;
+      btnText.innerHTML = '<span class="spinner">⟳</span> Processing...';
+
+      const handler = PaystackPop.setup({
+        key: PAYSTACK_KEY,
+        email: email,
+        amount: data.amount * 100,
+        currency: data.currency,
+        ref: 'ITR-' + trackingNum.toUpperCase() + '-' + Date.now(),
+        metadata: {
+          custom_fields: [
+            { display_name: "Tracking Number", variable_name: "tracking_number", value: trackingNum.toUpperCase() },
+            { display_name: "Name", variable_name: "name", value: name },
+            { display_name: "Phone", variable_name: "phone", value: phone }
+          ]
+        },
+        callback: function(response) {
+          document.getElementById('paymentForm').classList.add('hidden');
+          document.getElementById('successScreen').classList.remove('hidden');
+          document.getElementById('refNum').textContent = response.reference;
+          document.getElementById('paidAmount').textContent = data.amount + ' ' + data.currency;
+        },
+        onClose: function() {
+          btn.disabled = false;
+          btnText.textContent = 'Pay Now';
+        }
+      });
+
+      handler.openIframe();
+    }
+  </script>
+</body>
+</html>
