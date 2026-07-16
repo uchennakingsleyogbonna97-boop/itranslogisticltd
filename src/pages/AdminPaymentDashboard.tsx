@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   CreditCard, Search, Download, CheckCircle, 
-  XCircle, Clock, Package, ArrowLeft, Eye
+  XCircle, Clock, Package, Eye
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -99,7 +99,7 @@ const mockPayments: PaymentRecord[] = [
 ];
 
 export default function AdminPaymentDashboard() {
-  const [payments, setPayments] = useState<PaymentRecord[]>(mockPayments);
+  const [payments] = useState<PaymentRecord[]>(mockPayments);
   const [filteredPayments, setFilteredPayments] = useState<PaymentRecord[]>(mockPayments);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -230,14 +230,21 @@ export default function AdminPaymentDashboard() {
               <h1 className="font-display text-lg font-semibold text-gray-800">Payment Dashboard</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" size="sm" onClick={fetchPayments} disabled={isLoading}>
+              <button 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900 h-9 px-3"
+                onClick={fetchPayments} 
+                disabled={isLoading}
+              >
                 <Clock className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
                 Refresh
-              </Button>
-              <Button variant="outline" size="sm" onClick={exportToCSV}>
+              </button>
+              <button 
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900 h-9 px-3"
+                onClick={exportToCSV}
+              >
                 <Download className="w-4 h-4 mr-2" />
                 Export CSV
-              </Button>
+              </button>
             </div>
           </div>
         </div>
@@ -386,16 +393,15 @@ export default function AdminPaymentDashboard() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
+                        <button
+                          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-gray-100 hover:text-gray-900 h-9 px-3"
                           onClick={() => {
                             setSelectedPayment(payment);
                             setIsDetailOpen(true);
                           }}
                         >
                           <Eye className="w-4 h-4" />
-                        </Button>
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -485,21 +491,20 @@ export default function AdminPaymentDashboard() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <Button 
-                  variant="outline" 
-                  className="flex-1"
+                <button 
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-gray-300 bg-white hover:bg-gray-100 hover:text-gray-900 h-10 px-4 py-2 flex-1"
                   onClick={() => {
                     navigator.clipboard.writeText(selectedPayment.reference);
                     toast.success('Reference copied');
                   }}
                 >
                   Copy Reference
-                </Button>
+                </button>
                 {selectedPayment.status === 'pending' && (
-                  <Button className="flex-1 bg-primary hover:bg-primary-600">
+                  <button className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-white hover:bg-primary/90 h-10 px-4 py-2 flex-1">
                     <CreditCard className="w-4 h-4 mr-2" />
                     Send Reminder
-                  </Button>
+                  </button>
                 )}
               </div>
             </div>
