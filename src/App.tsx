@@ -946,7 +946,10 @@ function App() {
               {/* Timeline */}
               <div className="tracking-timeline space-y-6">
                 {trackingData.events.map((event, index) => (
-                  <div key={index} className={`tracking-timeline-item ${event.completed ? 'completed' : ''}`}>
+                  <div key={index} className="tracking-timeline-item relative pl-12" style={{ 
+  '--dot-color': event.completed ? '#22c55e' : '#fbbf24',
+  '--dot-shadow': event.completed ? '#22c55e' : '#fbbf24'
+} as React.CSSProperties}>
                     <div className="bg-gray-50 rounded-lg p-4">
                       <div className="flex flex-wrap items-center gap-2 mb-2">
                         <span className="font-display font-bold text-black">{event.date}</span>
