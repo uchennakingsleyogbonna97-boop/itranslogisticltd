@@ -83,14 +83,14 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #e5e7eb;
+    background: #fbbf24;    /* was #e5e7eb */
     border: 3px solid white;
-    box-shadow: 0 0 0 2px #e5e7eb;
+    box-shadow: 0 0 0 2px #fbbf24;    /* was #e5e7eb */
   }
 
   .tracking-timeline-item.completed::before {
-    background: #f28705;
-    box-shadow: 0 0 0 2px #f28705;
+    background: #22c55e;    /* was #f28705 */
+    box-shadow: 0 0 0 2px #22c55e;    /* was #f28705 */
   }
 }
 
