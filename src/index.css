@@ -83,14 +83,14 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #fbbf24;    /* was #e5e7eb */
+    background: var(--dot-color, #fbbf24);
     border: 3px solid white;
-    box-shadow: 0 0 0 2px #fbbf24;    /* was #e5e7eb */
+    box-shadow: 0 0 0 2px var(--dot-shadow, #fbbf24);
   }
 
   .tracking-timeline-item.completed::before {
-    background: #22c55e;    /* was #f28705 */
-    box-shadow: 0 0 0 2px #22c55e;    /* was #f28705 */
+    background: var(--dot-color, #22c55e);
+    box-shadow: 0 0 0 2px var(--dot-shadow, #22c55e);
   }
 }
 
