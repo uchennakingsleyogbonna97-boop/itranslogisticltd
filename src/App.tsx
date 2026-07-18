@@ -50,7 +50,7 @@ const sampleTrackingData: Record<string, TrackingData> = {
     status: 'Arrived at Destination Airport - Pending Customs Clearance',
     paymentStatus: 'pending',
     paymentAmount: 450,
-    paymentCurrency: 'PLN',
+    paymentCurrency: 'USD',
     recipientEmail: 'recipient@example.com',
     recipientPhone: '+48 123 456 789',
     recipientName: 'Jan Kowalski',
